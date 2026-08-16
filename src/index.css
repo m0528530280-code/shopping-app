@@ -5,12 +5,12 @@
   --surface-border: #E8E5DA;
   --ink: #24291F;
   --ink-soft: #6B7264;
-  --green: #16824A;       /* צריך לקנות - מצב פעיל */
-  --green-soft: #D4EDDD;
-  --amber: #A8670A;       /* נקנה - סימון */
-  --amber-soft: #FCE4B8;
-  --brick: #C23B2E;       /* מחיקה / אזהרה */
-  --brick-soft: #FADAD5;
+  --green: #3F6B49;       /* צריך לקנות - מצב פעיל */
+  --green-soft: #E7EFE6;
+  --amber: #93611A;       /* נקנה - סימון */
+  --amber-soft: #FBF0DC;
+  --brick: #A23F33;       /* מחיקה / אזהרה */
+  --brick-soft: #F7E7E4;
 
   --font-display: 'Heebo', system-ui, sans-serif;
   --font-body: 'Rubik', system-ui, sans-serif;
@@ -24,8 +24,8 @@
   --shadow-md: 0 2px 4px rgba(36,41,31,0.05), 0 10px 24px rgba(36,41,31,0.09);
   --shadow-lg: 0 4px 10px rgba(36,41,31,0.07), 0 18px 40px rgba(36,41,31,0.14);
 
-  --green-grad: linear-gradient(135deg, #16824A, #0C5730);
-  --amber-grad: linear-gradient(135deg, #A8670A, #7A4B08);
+  --green-grad: linear-gradient(135deg, #4d8058, #33573e);
+  --amber-grad: linear-gradient(135deg, #93611a, #6e4813);
   --ink-grad: linear-gradient(160deg, #2c3324, #181c12);
 
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -41,9 +41,9 @@ html, body, #root {
 
 body {
   background:
-    radial-gradient(720px 440px at 6% -8%, rgba(22,130,74,0.40) 0%, rgba(22,130,74,0) 65%),
-    radial-gradient(660px 480px at 110% 12%, rgba(168,103,10,0.36) 0%, rgba(168,103,10,0) 65%),
-    radial-gradient(860px 600px at 50% 108%, rgba(22,130,74,0.26) 0%, rgba(22,130,74,0) 60%),
+    radial-gradient(760px 420px at 8% -6%, rgba(63,107,73,0.10) 0%, rgba(63,107,73,0) 60%),
+    radial-gradient(680px 460px at 108% 18%, rgba(147,97,26,0.09) 0%, rgba(147,97,26,0) 60%),
+    radial-gradient(900px 600px at 50% 100%, rgba(63,107,73,0.06) 0%, rgba(63,107,73,0) 55%),
     var(--bg);
   background-attachment: fixed;
   color: var(--ink);
@@ -154,10 +154,10 @@ input, select {
 }
 
 .tab-bar button.active {
-  color: white;
-  background: var(--green-grad);
+  color: var(--green);
+  background: linear-gradient(135deg, var(--green-soft), #dcebdd);
   transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(22,130,74,0.35);
+  box-shadow: 0 2px 6px rgba(63,107,73,0.12);
 }
 
 .tab-bar button.active::after {
@@ -165,7 +165,7 @@ input, select {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: white;
+  background: var(--green);
   margin-top: 1px;
   animation: pop-in 0.25s var(--ease-spring);
 }
@@ -192,7 +192,7 @@ input, select {
   justify-content: center;
   line-height: 1;
   animation: pop-in 0.25s var(--ease-spring);
-  box-shadow: 0 1px 3px rgba(194,59,46,0.45);
+  box-shadow: 0 1px 3px rgba(162,63,51,0.4);
 }
 
 @media (hover: hover) {
@@ -272,23 +272,20 @@ input, select {
 
 .circle-btn.needed-on {
   border-color: var(--green);
-  background: var(--green-grad);
-  color: white;
-  box-shadow: 0 2px 8px rgba(22,130,74,0.35);
+  background: linear-gradient(135deg, var(--green-soft), #dcebdd);
+  color: var(--green);
 }
 
 .circle-btn.purchased-on {
   border-color: var(--amber);
-  background: var(--amber-grad);
-  color: white;
-  box-shadow: 0 2px 8px rgba(168,103,10,0.35);
+  background: linear-gradient(135deg, var(--amber-soft), #f5e4c2);
+  color: var(--amber);
 }
 
 .circle-btn.danger {
   border-color: var(--brick);
-  background: linear-gradient(135deg, #d1493b, var(--brick));
-  color: white;
-  box-shadow: 0 2px 8px rgba(194,59,46,0.3);
+  background: var(--brick-soft);
+  color: var(--brick);
 }
 
 .check-icon path {
@@ -310,7 +307,7 @@ input, select {
 .price-input:focus {
   outline: none;
   border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(22,130,74,0.20);
+  box-shadow: 0 0 0 3px rgba(63,107,73,0.15);
   background: var(--surface);
 }
 
@@ -352,7 +349,7 @@ input, select {
 .search-box:focus {
   outline: none;
   border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(22,130,74,0.20);
+  box-shadow: 0 0 0 3px rgba(63,107,73,0.15);
 }
 
 /* -- Category header -- */
@@ -393,7 +390,7 @@ input, select {
 .progress-fill {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--green), #2FAE68);
+  background: linear-gradient(90deg, var(--green), #5a9166);
   transition: width 0.45s var(--ease-out);
 }
 
@@ -531,7 +528,7 @@ input, select {
 .auth-screen input:focus {
   outline: none;
   border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(22,130,74,0.20);
+  box-shadow: 0 0 0 3px rgba(63,107,73,0.15);
 }
 .auth-error {
   color: var(--brick);
