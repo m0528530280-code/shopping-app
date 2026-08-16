@@ -41,9 +41,9 @@ html, body, #root {
 
 body {
   background:
-    radial-gradient(760px 460px at 8% -6%, rgba(22,130,74,0.22) 0%, rgba(22,130,74,0) 62%),
-    radial-gradient(700px 500px at 108% 14%, rgba(168,103,10,0.20) 0%, rgba(168,103,10,0) 62%),
-    radial-gradient(900px 620px at 50% 105%, rgba(22,130,74,0.14) 0%, rgba(22,130,74,0) 58%),
+    radial-gradient(720px 440px at 6% -8%, rgba(22,130,74,0.40) 0%, rgba(22,130,74,0) 65%),
+    radial-gradient(660px 480px at 110% 12%, rgba(168,103,10,0.36) 0%, rgba(168,103,10,0) 65%),
+    radial-gradient(860px 600px at 50% 108%, rgba(22,130,74,0.26) 0%, rgba(22,130,74,0) 60%),
     var(--bg);
   background-attachment: fixed;
   color: var(--ink);
@@ -154,10 +154,10 @@ input, select {
 }
 
 .tab-bar button.active {
-  color: var(--green);
-  background: linear-gradient(135deg, var(--green-soft), #B8E3C6);
+  color: white;
+  background: var(--green-grad);
   transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(22,130,74,0.18);
+  box-shadow: 0 3px 10px rgba(22,130,74,0.35);
 }
 
 .tab-bar button.active::after {
@@ -165,7 +165,7 @@ input, select {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: var(--green);
+  background: white;
   margin-top: 1px;
   animation: pop-in 0.25s var(--ease-spring);
 }
@@ -272,20 +272,23 @@ input, select {
 
 .circle-btn.needed-on {
   border-color: var(--green);
-  background: linear-gradient(135deg, var(--green-soft), #B8E3C6);
-  color: var(--green);
+  background: var(--green-grad);
+  color: white;
+  box-shadow: 0 2px 8px rgba(22,130,74,0.35);
 }
 
 .circle-btn.purchased-on {
   border-color: var(--amber);
-  background: linear-gradient(135deg, var(--amber-soft), #F5CB84);
-  color: var(--amber);
+  background: var(--amber-grad);
+  color: white;
+  box-shadow: 0 2px 8px rgba(168,103,10,0.35);
 }
 
 .circle-btn.danger {
   border-color: var(--brick);
-  background: var(--brick-soft);
-  color: var(--brick);
+  background: linear-gradient(135deg, #d1493b, var(--brick));
+  color: white;
+  box-shadow: 0 2px 8px rgba(194,59,46,0.3);
 }
 
 .check-icon path {
