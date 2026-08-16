@@ -24,6 +24,10 @@
   --shadow-md: 0 2px 4px rgba(36,41,31,0.05), 0 10px 24px rgba(36,41,31,0.09);
   --shadow-lg: 0 4px 10px rgba(36,41,31,0.07), 0 18px 40px rgba(36,41,31,0.14);
 
+  --green-grad: linear-gradient(135deg, #4d8058, #33573e);
+  --amber-grad: linear-gradient(135deg, #93611a, #6e4813);
+  --ink-grad: linear-gradient(160deg, #2c3324, #181c12);
+
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -37,7 +41,11 @@ html, body, #root {
 
 body {
   background:
-    radial-gradient(900px 480px at 50% -8%, #fbfbf7 0%, var(--bg) 55%) fixed;
+    radial-gradient(760px 420px at 8% -6%, rgba(63,107,73,0.10) 0%, rgba(63,107,73,0) 60%),
+    radial-gradient(680px 460px at 108% 18%, rgba(147,97,26,0.09) 0%, rgba(147,97,26,0) 60%),
+    radial-gradient(900px 600px at 50% 100%, rgba(63,107,73,0.06) 0%, rgba(63,107,73,0) 55%),
+    var(--bg);
+  background-attachment: fixed;
   color: var(--ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
@@ -73,7 +81,9 @@ input, select {
   padding: 22px 20px 14px;
   position: sticky;
   top: 0;
-  background: var(--bg);
+  background: rgba(245,246,242,0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   z-index: 5;
 }
 
@@ -83,6 +93,10 @@ input, select {
   font-size: 27px;
   margin: 0 0 3px;
   letter-spacing: -0.4px;
+  background: linear-gradient(135deg, var(--ink), var(--green));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .app-header .subtitle {
@@ -141,8 +155,9 @@ input, select {
 
 .tab-bar button.active {
   color: var(--green);
-  background: var(--green-soft);
+  background: linear-gradient(135deg, var(--green-soft), #dcebdd);
   transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(63,107,73,0.12);
 }
 
 .tab-bar button.active::after {
@@ -191,6 +206,10 @@ input, select {
   overflow-y: auto;
 }
 
+.tab-panel {
+  animation: tab-fade-in 0.3s var(--ease-out);
+}
+
 /* -- Product row (two-circle system) -- */
 .item-row {
   display: flex;
@@ -199,7 +218,7 @@ input, select {
   background: var(--surface);
   border: 1px solid var(--surface-border);
   border-radius: var(--radius);
-  padding: 12px 14px;
+  padding: 14px 16px;
   margin-bottom: 8px;
   box-shadow: var(--shadow-sm);
   transition: box-shadow 0.2s ease, transform 0.2s var(--ease-out), background-color 0.25s ease, opacity 0.25s ease;
@@ -253,13 +272,13 @@ input, select {
 
 .circle-btn.needed-on {
   border-color: var(--green);
-  background: var(--green-soft);
+  background: linear-gradient(135deg, var(--green-soft), #dcebdd);
   color: var(--green);
 }
 
 .circle-btn.purchased-on {
   border-color: var(--amber);
-  background: var(--amber-soft);
+  background: linear-gradient(135deg, var(--amber-soft), #f5e4c2);
   color: var(--amber);
 }
 
@@ -310,8 +329,8 @@ input, select {
 @media (hover: hover) {
   .btn:hover { filter: brightness(1.05); box-shadow: var(--shadow-md); }
 }
-.btn-primary { background: var(--green); color: white; }
-.btn-amber { background: var(--amber); color: white; font-weight: 700; }
+.btn-primary { background: var(--green-grad); color: white; }
+.btn-amber { background: var(--amber-grad); color: white; font-weight: 700; }
 .btn-outline { background: var(--surface); border: 1px solid var(--surface-border); color: var(--ink); box-shadow: none; }
 .btn-full { width: 100%; }
 
@@ -379,7 +398,7 @@ input, select {
 .receipt-total {
   position: sticky;
   bottom: 0;
-  background: var(--ink);
+  background: var(--ink-grad);
   color: white;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   padding: 16px 20px;
@@ -484,6 +503,17 @@ input, select {
   font-size: 28px;
   text-align: center;
   margin-bottom: 24px;
+  background: linear-gradient(135deg, var(--ink), var(--green));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.auth-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--surface-border);
 }
 .auth-screen input {
   width: 100%;
@@ -492,7 +522,7 @@ input, select {
   border: 1px solid var(--surface-border);
   margin-bottom: 10px;
   font-size: 15px;
-  background: var(--surface);
+  background: var(--bg);
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 .auth-screen input:focus {
@@ -570,6 +600,60 @@ input, select {
   animation: slide-up 0.24s var(--ease-out);
 }
 
+/* -- Celebration (complete purchase) -- */
+.celebrate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: rgba(24,28,18,0.4);
+  pointer-events: none;
+  animation: celebrate-overlay-anim 1.7s ease forwards;
+}
+.celebrate-burst {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--green-grad);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  animation: celebrate-pop 0.5s var(--ease-spring);
+}
+.celebrate-text {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 19px;
+  color: white;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+}
+.confetti-wrap { position: absolute; inset: 0; }
+.confetti-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px;
+  border-radius: 50%;
+  animation: confetti-burst 0.8s var(--ease-out) forwards;
+}
+.confetti-dot:nth-child(1) { --angle: 0deg; background: var(--amber); }
+.confetti-dot:nth-child(2) { --angle: 45deg; background: var(--green); }
+.confetti-dot:nth-child(3) { --angle: 90deg; background: var(--brick); }
+.confetti-dot:nth-child(4) { --angle: 135deg; background: var(--amber); }
+.confetti-dot:nth-child(5) { --angle: 180deg; background: var(--green); }
+.confetti-dot:nth-child(6) { --angle: 225deg; background: var(--brick); }
+.confetti-dot:nth-child(7) { --angle: 270deg; background: var(--amber); }
+.confetti-dot:nth-child(8) { --angle: 315deg; background: var(--green); }
+
 /* -- Keyframes -- */
 @keyframes pop-in {
   from { transform: scale(0); opacity: 0; }
@@ -593,6 +677,25 @@ input, select {
 @keyframes slide-up {
   from { transform: translateY(18px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+@keyframes tab-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes celebrate-overlay-anim {
+  0% { opacity: 0; }
+  12% { opacity: 1; }
+  82% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes celebrate-pop {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+@keyframes confetti-burst {
+  0% { transform: rotate(var(--angle)) translateY(0) scale(1); opacity: 1; }
+  100% { transform: rotate(var(--angle)) translateY(-50px) scale(0.3); opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

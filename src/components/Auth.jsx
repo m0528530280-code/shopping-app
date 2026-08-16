@@ -56,20 +56,22 @@ export default function Auth() {
     return (
       <div className="auth-screen">
         <h1>🛒 רשימת קניות</h1>
-        {error && <div className="auth-error">{error}</div>}
-        <form onSubmit={handleReset}>
-          <input
-            type="password"
-            placeholder="סיסמה חדשה"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            minLength={6}
-            required
-          />
-          <button className="btn btn-primary btn-full" disabled={loading}>
-            {loading ? 'שומר...' : 'שמירת סיסמה חדשה'}
-          </button>
-        </form>
+        <div className="auth-card">
+          {error && <div className="auth-error">{error}</div>}
+          <form onSubmit={handleReset}>
+            <input
+              type="password"
+              placeholder="סיסמה חדשה"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              minLength={6}
+              required
+            />
+            <button className="btn btn-primary btn-full" disabled={loading}>
+              {loading ? 'שומר...' : 'שמירת סיסמה חדשה'}
+            </button>
+          </form>
+        </div>
       </div>
     )
   }
@@ -78,23 +80,25 @@ export default function Auth() {
     return (
       <div className="auth-screen">
         <h1>🛒 רשימת קניות</h1>
-        {error && <div className="auth-error">{error}</div>}
-        {message && <div className="auth-message">{message}</div>}
-        <form onSubmit={handleForgot}>
-          <input
-            type="email"
-            placeholder="אימייל"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <button className="btn btn-primary btn-full" disabled={loading}>
-            {loading ? 'שולח...' : 'שליחת קישור לאיפוס סיסמה'}
+        <div className="auth-card">
+          {error && <div className="auth-error">{error}</div>}
+          {message && <div className="auth-message">{message}</div>}
+          <form onSubmit={handleForgot}>
+            <input
+              type="email"
+              placeholder="אימייל"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <button className="btn btn-primary btn-full" disabled={loading}>
+              {loading ? 'שולח...' : 'שליחת קישור לאיפוס סיסמה'}
+            </button>
+          </form>
+          <button className="auth-link" onClick={() => { setMode('login'); setError(''); setMessage('') }}>
+            חזרה להתחברות
           </button>
-        </form>
-        <button className="auth-link" onClick={() => { setMode('login'); setError(''); setMessage('') }}>
-          חזרה להתחברות
-        </button>
+        </div>
       </div>
     )
   }
@@ -102,30 +106,32 @@ export default function Auth() {
   return (
     <div className="auth-screen">
       <h1>🛒 רשימת קניות</h1>
-      {error && <div className="auth-error">{error}</div>}
-      {message && <div className="auth-message">{message}</div>}
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="אימייל"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="סיסמה"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button className="btn btn-primary btn-full" disabled={loading}>
-          {loading ? 'מתחבר...' : 'התחברות'}
+      <div className="auth-card">
+        {error && <div className="auth-error">{error}</div>}
+        {message && <div className="auth-message">{message}</div>}
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="אימייל"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="סיסמה"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button className="btn btn-primary btn-full" disabled={loading}>
+            {loading ? 'מתחבר...' : 'התחברות'}
+          </button>
+        </form>
+        <button className="auth-link" onClick={() => { setMode('forgot'); setError(''); setMessage('') }}>
+          שכחת סיסמה?
         </button>
-      </form>
-      <button className="auth-link" onClick={() => { setMode('forgot'); setError(''); setMessage('') }}>
-        שכחת סיסמה?
-      </button>
+      </div>
     </div>
   )
 }

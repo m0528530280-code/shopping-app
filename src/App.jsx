@@ -63,12 +63,12 @@ export default function App() {
         {shoppingData.loading ? (
           <SkeletonList />
         ) : (
-          <>
+          <div key={tab} className="tab-panel">
             {tab === 'list' && <ShoppingList data={shoppingData} />}
             {tab === 'shopping' && <ShoppingMode data={shoppingData} />}
             {tab === 'products' && <ProductManager data={shoppingData} />}
             {tab === 'history' && <History householdId={profile.household_id} />}
-          </>
+          </div>
         )}
       </main>
 

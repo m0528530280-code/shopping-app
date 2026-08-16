@@ -34,6 +34,14 @@ export default function ShoppingMode({ data }) {
   const { products, listItems, sessionItems, togglePurchased, setPrice, completeSession, toggleNeeded } = data
   const [filter, setFilter] = useState('all') // all | pending | purchased
   const [confirming, setConfirming] = useState(false)
+  const [celebrate, setCelebrate] = useState(false)
+
+  async function handleComplete() {
+    await completeSession()
+    setConfirming(false)
+    setCelebrate(true)
+    setTimeout(() => setCelebrate(false), 1700)
+  }
 
   const items = useMemo(() => {
     const neededIds = new Set(listItems.map((i) => i.product_id))
@@ -63,13 +71,28 @@ export default function ShoppingMode({ data }) {
   const pct = items.length ? (purchasedCount / items.length) * 100 : 0
   const animatedTotal = useCountUp(total)
 
+  const celebrateOverlay = celebrate && (
+    <div className="celebrate-overlay">
+      <div className="celebrate-burst">
+        <div className="confetti-wrap">
+          {Array.from({ length: 8 }).map((_, i) => <span key={i} className="confetti-dot" />)}
+        </div>
+        <CheckIcon size={44} />
+      </div>
+      <div className="celebrate-text">🎉 הקנייה הושלמה!</div>
+    </div>
+  )
+
   if (items.length === 0) {
     return (
-      <EmptyState
-        icon="📭"
-        title="אין מוצרים ברשימה הפעילה"
-        subtitle="הוסיפו מוצרים במסך הרשימה"
-      />
+      <>
+        <EmptyState
+          icon="📭"
+          title="אין מוצרים ברשימה הפעילה"
+          subtitle="הוסיפו מוצרים במסך הרשימה"
+        />
+        {celebrateOverlay}
+      </>
     )
   }
 
@@ -142,7 +165,7 @@ export default function ShoppingMode({ data }) {
             <button
               className="btn btn-primary btn-full"
               style={{ marginBottom: 8 }}
-              onClick={async () => { await completeSession(); setConfirming(false) }}
+              onClick={handleComplete}
             >
               אישור וסיום
             </button>
@@ -150,6 +173,8 @@ export default function ShoppingMode({ data }) {
           </div>
         </div>
       )}
+
+      {celebrateOverlay}
     </div>
   )
 }
