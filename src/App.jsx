@@ -7,6 +7,8 @@ import ShoppingList from './components/ShoppingList'
 import ShoppingMode from './components/ShoppingMode'
 import ProductManager from './components/ProductManager'
 import History from './components/History'
+import EmptyState from './components/EmptyState'
+import SkeletonList from './components/SkeletonList'
 
 export default function App() {
   const [session, setSession] = useState(undefined) // undefined = loading
@@ -30,14 +32,20 @@ export default function App() {
 
   const shoppingData = useShoppingData(profile?.household_id, profile?.id)
 
+  const pendingCount = shoppingData.listItems.filter((li) => {
+    const si = shoppingData.sessionItems.find((i) => i.product_id === li.product_id)
+    return !si?.purchased
+  }).length
+
   if (session === undefined) return null // loading
   if (!session) return <Auth />
   if (!profile) {
     return (
-      <div className="empty-state">
-        <div className="big">⚠️</div>
-        <div>המשתמש שלך לא משויך עדיין למשק בית. פנה למי שהקים את המערכת.</div>
-      </div>
+      <EmptyState
+        icon="⚠️"
+        title="אין שיוך למשק בית"
+        subtitle="המשתמש שלך לא משויך עדיין למשק בית. פנה למי שהקים את המערכת."
+      />
     )
   }
 
@@ -53,7 +61,7 @@ export default function App() {
 
       <main className="app-content">
         {shoppingData.loading ? (
-          <div className="empty-state">טוען...</div>
+          <SkeletonList />
         ) : (
           <>
             {tab === 'list' && <ShoppingList data={shoppingData} />}
@@ -64,7 +72,7 @@ export default function App() {
         )}
       </main>
 
-      <Nav active={tab} onChange={setTab} />
+      <Nav active={tab} onChange={setTab} badge={pendingCount} />
     </div>
   )
 }

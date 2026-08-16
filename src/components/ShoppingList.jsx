@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react'
+import CheckIcon from './CheckIcon'
+import EmptyState from './EmptyState'
 
 export default function ShoppingList({ data }) {
   const { products, listItems, sessionItems, toggleNeeded, togglePurchased, setPrice } = data
@@ -40,10 +42,7 @@ export default function ShoppingList({ data }) {
       />
 
       {grouped.length === 0 ? (
-        <div className="empty-state">
-          <div className="big">🛒</div>
-          <div>לא נמצאו מוצרים.</div>
-        </div>
+        <EmptyState icon="🛒" title="לא נמצאו מוצרים" subtitle="נסו חיפוש אחר" />
       ) : (
         grouped.map(([cat, catItems]) => (
           <div key={cat}>
@@ -56,7 +55,7 @@ export default function ShoppingList({ data }) {
                     className={`circle-btn ${needed ? 'needed-on' : ''}`}
                     title={needed ? 'הסר מהרשימה' : 'הוסף לרשימה'}
                     onClick={() => toggleNeeded(p.id)}
-                  >{needed ? '✓' : ''}</button>
+                  >{needed && <CheckIcon />}</button>
                   <div className="info">
                     <div className="name">{p.name}</div>
                   </div>
@@ -66,7 +65,7 @@ export default function ShoppingList({ data }) {
                         className={`circle-btn ${purchasedFor(p.id) ? 'purchased-on' : ''}`}
                         title="נקנה"
                         onClick={() => togglePurchased(p.id)}
-                      >{purchasedFor(p.id) ? '✓' : ''}</button>
+                      >{purchasedFor(p.id) && <CheckIcon />}</button>
                       <input
                         className="price-input"
                         type="number"

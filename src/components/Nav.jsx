@@ -5,7 +5,7 @@ const TABS = [
   { id: 'history', label: 'היסטוריה', icon: '🧾' },
 ]
 
-export default function Nav({ active, onChange }) {
+export default function Nav({ active, onChange, badge = 0 }) {
   return (
     <nav className="tab-bar">
       {TABS.map((tab) => (
@@ -14,7 +14,10 @@ export default function Nav({ active, onChange }) {
           className={active === tab.id ? 'active' : ''}
           onClick={() => onChange(tab.id)}
         >
-          <span className="tab-icon">{tab.icon}</span>
+          <span className="tab-icon-wrap">
+            <span className="tab-icon">{tab.icon}</span>
+            {tab.id === 'shopping' && badge > 0 && <span className="nav-badge">{badge}</span>}
+          </span>
           <span>{tab.label}</span>
         </button>
       ))}

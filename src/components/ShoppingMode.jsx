@@ -1,4 +1,34 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import CheckIcon from './CheckIcon'
+import EmptyState from './EmptyState'
+
+function useCountUp(value, duration = 450) {
+  const [display, setDisplay] = useState(value)
+  const prevRef = useRef(value)
+
+  useEffect(() => {
+    const from = prevRef.current
+    const to = value
+    if (from === to) return
+    const start = performance.now()
+    let raf
+    function tick(now) {
+      const p = Math.min(1, (now - start) / duration)
+      const eased = 1 - Math.pow(1 - p, 3)
+      setDisplay(from + (to - from) * eased)
+      if (p < 1) {
+        raf = requestAnimationFrame(tick)
+      } else {
+        prevRef.current = to
+        setDisplay(to)
+      }
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [value, duration])
+
+  return display
+}
 
 export default function ShoppingMode({ data }) {
   const { products, listItems, sessionItems, togglePurchased, setPrice, completeSession, toggleNeeded } = data
@@ -30,18 +60,31 @@ export default function ShoppingMode({ data }) {
 
   const total = items.reduce((sum, i) => sum + (i.purchased ? Number(i.price || 0) : 0), 0)
   const purchasedCount = items.filter((i) => i.purchased).length
+  const pct = items.length ? (purchasedCount / items.length) * 100 : 0
+  const animatedTotal = useCountUp(total)
 
   if (items.length === 0) {
     return (
-      <div className="empty-state">
-        <div className="big">📭</div>
-        <div>אין מוצרים ברשימה הפעילה. הוסיפו מוצרים במסך הרשימה.</div>
-      </div>
+      <EmptyState
+        icon="📭"
+        title="אין מוצרים ברשימה הפעילה"
+        subtitle="הוסיפו מוצרים במסך הרשימה"
+      />
     )
   }
 
   return (
     <div>
+      <div className="progress-header">
+        <div className="progress-text">
+          <span>{purchasedCount} מתוך {items.length} נקנו</span>
+          <span className="progress-pct">{Math.round(pct)}%</span>
+        </div>
+        <div className="progress-track">
+          <div className="progress-fill" style={{ width: `${pct}%` }} />
+        </div>
+      </div>
+
       <div className="filter-pills">
         <button className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>הכל</button>
         <button className={filter === 'pending' ? 'active' : ''} onClick={() => setFilter('pending')}>עדיין לא נקנה</button>
@@ -56,7 +99,7 @@ export default function ShoppingMode({ data }) {
               <button
                 className={`circle-btn ${p.purchased ? 'purchased-on' : ''}`}
                 onClick={() => togglePurchased(p.id)}
-              >{p.purchased ? '✓' : ''}</button>
+              >{p.purchased && <CheckIcon />}</button>
               <div className="info">
                 <div className="name">{p.name}</div>
               </div>
@@ -83,7 +126,7 @@ export default function ShoppingMode({ data }) {
       <div className="receipt-total">
         <div>
           <div className="label">{purchasedCount} מתוך {items.length} נקנו</div>
-          <div className="amount">₪{total.toFixed(2)}</div>
+          <div className="amount">₪{animatedTotal.toFixed(2)}</div>
         </div>
         <button className="btn btn-amber" onClick={() => setConfirming(true)}>סיום קנייה</button>
       </div>

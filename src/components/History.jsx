@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../supabaseClient'
+import EmptyState from './EmptyState'
 
 export default function History({ householdId }) {
   const [sessions, setSessions] = useState([])
@@ -30,12 +31,7 @@ export default function History({ householdId }) {
   }
 
   if (sessions.length === 0) {
-    return (
-      <div className="empty-state">
-        <div className="big">🧾</div>
-        <div>עדיין אין קניות בהיסטוריה.</div>
-      </div>
-    )
+    return <EmptyState icon="🧾" title="עדיין אין קניות בהיסטוריה" />
   }
 
   return (
