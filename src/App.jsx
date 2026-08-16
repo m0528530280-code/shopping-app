@@ -10,10 +10,20 @@ import History from './components/History'
 import EmptyState from './components/EmptyState'
 import SkeletonList from './components/SkeletonList'
 
+const TAB_ORDER = ['list', 'shopping', 'products', 'history']
+
 export default function App() {
   const [session, setSession] = useState(undefined) // undefined = loading
   const [profile, setProfile] = useState(null)
   const [tab, setTab] = useState('list')
+  const [direction, setDirection] = useState('forward')
+
+  function changeTab(next) {
+    const from = TAB_ORDER.indexOf(tab)
+    const to = TAB_ORDER.indexOf(next)
+    setDirection(to > from ? 'forward' : 'back')
+    setTab(next)
+  }
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session))
@@ -63,7 +73,7 @@ export default function App() {
         {shoppingData.loading ? (
           <SkeletonList />
         ) : (
-          <div key={tab} className="tab-panel">
+          <div key={tab} className={`tab-panel tab-panel--${direction}`}>
             {tab === 'list' && <ShoppingList data={shoppingData} />}
             {tab === 'shopping' && <ShoppingMode data={shoppingData} />}
             {tab === 'products' && <ProductManager data={shoppingData} />}
@@ -72,7 +82,7 @@ export default function App() {
         )}
       </main>
 
-      <Nav active={tab} onChange={setTab} badge={pendingCount} />
+      <Nav active={tab} onChange={changeTab} badge={pendingCount} />
     </div>
   )
 }

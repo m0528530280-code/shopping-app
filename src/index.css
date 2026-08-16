@@ -1,37 +1,46 @@
 :root {
-  /* -- טוקנים עיצוביים: פינטק מודרני -- */
-  --bg: #F6F7F9;
+  /* -- טוקנים עיצוביים: זהות נועזת בהשראת ירקות/פירות -- */
+  --bg: #FAF9FC;
   --surface: #FFFFFF;
-  --surface-border: #E7E9EE;
-  --ink: #101828;
-  --ink-soft: #667085;
+  --surface-border: #ECE9F2;
+  --ink: #1B1033;
+  --ink-soft: #6E6483;
 
-  --green: #0E6B5C;        /* primary - צריך לקנות / מצב פעיל */
-  --green-soft: #E3F5F1;
-  --green-light: #14B8A6;  /* קצה הגרדיאנט הראשי */
+  --lime: #C6F135;
+  --lime-soft: #EFFAD1;
+  --turquoise: #0EA5A4;
+  --turquoise-soft: #DFF7F6;
+  --plum: #7C3AED;
+  --plum-soft: #EEE4FD;
 
-  --amber: #8C5A15;        /* נקנה - סימון */
-  --amber-soft: #FBF1DE;
+  /* שמות ישנים נשמרים כדי לא לשבור קלאסים קיימים - ממופים לזהות החדשה */
+  --green: #0C8483;        /* טורקיז מוכהה - נגיש לטקסט/גבולות */
+  --green-soft: #DFF7F6;
+  --green-light: #C6F135;
 
-  --brick: #E4483A;        /* מחיקה / אזהרה */
-  --brick-soft: #FDEBE9;
+  --amber: #7C3AED;
+  --amber-soft: #EEE4FD;
+
+  --brick: #C81E4A;        /* אדום-אוכמניות עמוק - מחיקה/אזהרה */
+  --brick-soft: #FBE2E8;
 
   --font-display: 'Heebo', system-ui, sans-serif;
   --font-body: 'Rubik', system-ui, sans-serif;
   --font-mono: 'Roboto Mono', 'Consolas', monospace;
 
-  --radius-xs: 8px;
-  --radius-sm: 10px;
-  --radius: 16px;
-  --radius-lg: 22px;
+  --radius-xs: 10px;
+  --radius-sm: 14px;
+  --radius: 20px;
+  --radius-lg: 28px;
 
-  --shadow-sm: 0 1px 2px rgba(16,24,40,0.03), 0 2px 8px rgba(16,24,40,0.05);
-  --shadow-md: 0 2px 4px rgba(16,24,40,0.04), 0 10px 26px rgba(16,24,40,0.08);
-  --shadow-lg: 0 6px 14px rgba(16,24,40,0.08), 0 20px 44px rgba(16,24,40,0.16);
+  --shadow-sm: 0 1px 2px rgba(27,16,51,0.04), 0 2px 8px rgba(27,16,51,0.06);
+  --shadow-md: 0 2px 4px rgba(27,16,51,0.05), 0 10px 26px rgba(27,16,51,0.10);
+  --shadow-lg: 0 6px 14px rgba(27,16,51,0.10), 0 20px 44px rgba(27,16,51,0.20);
 
-  --green-grad: linear-gradient(135deg, #0E6B5C, #0A8A73);
-  --amber-grad: linear-gradient(135deg, #8C5A15, #6B4610);
-  --ink-grad: linear-gradient(135deg, #0E6B5C, #0A8A73);
+  --signature-grad: linear-gradient(120deg, var(--lime) 0%, var(--turquoise) 48%, var(--plum) 100%);
+  --green-grad: linear-gradient(120deg, #0C8483, #075F5E);
+  --amber-grad: linear-gradient(120deg, var(--plum), #6023C0);
+  --ink-grad: var(--signature-grad);
 
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -45,14 +54,34 @@ html, body, #root {
 }
 
 body {
-  background:
-    radial-gradient(640px 360px at 100% -4%, rgba(14,107,92,0.05) 0%, rgba(14,107,92,0) 60%),
-    var(--bg);
-  background-attachment: fixed;
+  position: relative;
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior-y: contain;
+}
+
+/* רקע אוכל/פירות גלובלי - מאחורי כל מסך באפליקציה */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/2023_Amsterdam_-_a_fruit_market_stall_at_the_Albert_Cuyp_market_in_the_sunlight_with_a_lot_of_city_people_walking_and_shopping_-_free_download_photo_in_Dutch_street_photography_by_Fons_Heijnsbroek%2C_Netherlands.tif/lossy-page1-960px-thumbnail.tif.jpg');
+  background-size: cover;
+  background-position: center 40%;
+  filter: blur(22px) saturate(1.2) brightness(1.05);
+  transform: scale(1.15);
+  z-index: -2;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(165deg, rgba(198,241,53,0.16), rgba(14,165,164,0.20) 45%, rgba(124,58,237,0.30)),
+    rgba(250,249,252,0.72);
+  z-index: -1;
 }
 
 button {
@@ -84,7 +113,7 @@ input, select {
   padding: 22px 20px 14px;
   position: sticky;
   top: 0;
-  background: rgba(246,247,249,0.82);
+  background: rgba(250,249,252,0.82);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   z-index: 5;
@@ -113,7 +142,7 @@ input, select {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(165deg, rgba(16,24,40,0.62), rgba(14,107,92,0.55));
+  background: linear-gradient(120deg, rgba(27,16,51,0.66), rgba(14,165,164,0.48) 55%, rgba(124,58,237,0.58));
   z-index: -1;
 }
 .app-header--photo h1 {
@@ -172,8 +201,8 @@ input, select {
   background: rgba(255,255,255,0.78);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-top: 1px solid rgba(16,24,40,0.06);
-  box-shadow: 0 -6px 20px rgba(16,24,40,0.05);
+  border-top: 1px solid rgba(27,16,51,0.06);
+  box-shadow: 0 -6px 20px rgba(27,16,51,0.05);
   padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
   z-index: 10;
 }
@@ -196,9 +225,9 @@ input, select {
 
 .tab-bar button.active {
   color: var(--green);
-  background: linear-gradient(135deg, var(--green-soft), #C7ECE5);
+  background: linear-gradient(135deg, var(--green-soft), #C3EFEE);
   transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(14,107,92,0.14), 0 0 0 4px rgba(14,107,92,0.08);
+  box-shadow: 0 2px 6px rgba(12,132,131,0.14), 0 0 0 4px rgba(12,132,131,0.08);
 }
 
 .tab-bar button.active::after {
@@ -233,7 +262,7 @@ input, select {
   justify-content: center;
   line-height: 1;
   animation: pop-in 0.25s var(--ease-spring);
-  box-shadow: 0 1px 3px rgba(228,72,58,0.4);
+  box-shadow: 0 1px 3px rgba(200,30,74,0.4);
 }
 
 @media (hover: hover) {
@@ -245,10 +274,14 @@ input, select {
   flex: 1;
   padding: 0 16px 24px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
-.tab-panel {
-  animation: tab-fade-in 0.3s var(--ease-out);
+.tab-panel--forward {
+  animation: slide-in-from-left 0.32s var(--ease-out);
+}
+.tab-panel--back {
+  animation: slide-in-from-right 0.32s var(--ease-out);
 }
 
 /* -- Product row (two-circle system) -- */
@@ -257,12 +290,12 @@ input, select {
   align-items: center;
   gap: 10px;
   background: var(--surface);
-  border: 1px solid rgba(16,24,40,0.04);
+  border: 1px solid rgba(27,16,51,0.04);
   border-radius: var(--radius);
   padding: 14px 16px;
   margin-bottom: 8px;
   box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.2s ease, transform 0.2s var(--ease-out), background-color 0.25s ease, opacity 0.25s ease;
+  transition: box-shadow 0.2s ease, transform 0.2s var(--ease-out), background-color 0.15s ease, opacity 0.25s ease;
 }
 
 @media (hover: hover) {
@@ -285,6 +318,7 @@ input, select {
 .item-row.purchased {
   background: var(--green-soft);
   border-color: transparent;
+  animation: row-pulse 0.35s var(--ease-spring);
 }
 .item-row.purchased .name {
   color: var(--ink-soft);
@@ -313,16 +347,18 @@ input, select {
 
 .circle-btn.needed-on {
   border-color: var(--green);
-  background: linear-gradient(135deg, var(--green-soft), #C7ECE5);
+  background: linear-gradient(135deg, var(--green-soft), #C3EFEE);
   color: var(--green);
-  box-shadow: 0 0 0 4px rgba(14,107,92,0.10);
+  box-shadow: 0 0 0 4px rgba(12,132,131,0.10);
+  animation: mark-pop 0.35s var(--ease-spring);
 }
 
 .circle-btn.purchased-on {
   border-color: var(--amber);
-  background: linear-gradient(135deg, var(--amber-soft), #F0D9A8);
+  background: linear-gradient(135deg, var(--amber-soft), #DCC8FA);
   color: var(--amber);
-  box-shadow: 0 0 0 4px rgba(140,90,21,0.10);
+  box-shadow: 0 0 0 4px rgba(124,58,237,0.14);
+  animation: mark-pop 0.35s var(--ease-spring);
 }
 
 .circle-btn.danger {
@@ -350,7 +386,7 @@ input, select {
 .price-input:focus {
   outline: none;
   border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(14,107,92,0.18);
+  box-shadow: 0 0 0 3px rgba(12,132,131,0.18);
   background: var(--surface);
 }
 
@@ -368,7 +404,7 @@ input, select {
   transition: transform 0.15s var(--ease-spring), filter 0.18s ease, box-shadow 0.18s ease;
   box-shadow: var(--shadow-sm);
 }
-.btn:active { transform: scale(0.98); }
+.btn:active { transform: scale(0.92); }
 @media (hover: hover) {
   .btn:hover { filter: brightness(1.05); box-shadow: var(--shadow-md); }
 }
@@ -392,7 +428,7 @@ input, select {
 .search-box:focus {
   outline: none;
   border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(14,107,92,0.18);
+  box-shadow: 0 0 0 3px rgba(12,132,131,0.18);
 }
 
 /* -- Category header -- */
@@ -428,7 +464,7 @@ input, select {
   border-radius: 999px;
   background: var(--surface-border);
   overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba(16,24,40,0.08);
+  box-shadow: inset 0 1px 2px rgba(27,16,51,0.08);
 }
 .progress-fill {
   height: 100%;
@@ -452,16 +488,17 @@ input, select {
   font-family: var(--font-display);
   box-shadow: var(--shadow-lg);
 }
-.receipt-total .label { font-size: 12.5px; opacity: 0.65; letter-spacing: 0.2px; font-family: var(--font-body); }
+.receipt-total .label { font-size: 12.5px; opacity: 0.85; letter-spacing: 0.2px; font-family: var(--font-body); text-shadow: 0 1px 6px rgba(27,16,51,0.35); }
 .receipt-total .amount {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: 32px;
-  font-weight: 700;
+  font-weight: 900;
   letter-spacing: -0.5px;
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
   direction: ltr;
   unicode-bidi: embed;
+  text-shadow: 0 2px 10px rgba(27,16,51,0.4);
 }
 
 /* -- Empty state -- */
@@ -574,7 +611,7 @@ input, select {
 .auth-screen input:focus {
   outline: none;
   border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(14,107,92,0.18);
+  box-shadow: 0 0 0 3px rgba(12,132,131,0.18);
 }
 .auth-error {
   color: var(--brick);
@@ -703,6 +740,16 @@ input, select {
 .confetti-dot:nth-child(8) { --angle: 315deg; background: var(--green); }
 
 /* -- Keyframes -- */
+@keyframes row-pulse {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.018); }
+  100% { transform: scale(1); }
+}
+@keyframes mark-pop {
+  0% { transform: scale(0.65); }
+  60% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
 @keyframes pop-in {
   from { transform: scale(0); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
@@ -726,9 +773,13 @@ input, select {
   from { transform: translateY(18px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
-@keyframes tab-fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes slide-in-from-left {
+  from { opacity: 0; transform: translateX(-28px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes slide-in-from-right {
+  from { opacity: 0; transform: translateX(28px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 @keyframes celebrate-overlay-anim {
   0% { opacity: 0; }
