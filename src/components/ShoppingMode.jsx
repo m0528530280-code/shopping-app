@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 
 export default function ShoppingMode({ data }) {
-  const { products, listItems, sessionItems, togglePurchased, setPrice, completeSession } = data
+  const { products, listItems, sessionItems, togglePurchased, setPrice, completeSession, toggleNeeded } = data
   const [filter, setFilter] = useState('all') // all | pending | purchased
   const [confirming, setConfirming] = useState(false)
 
@@ -68,6 +68,11 @@ export default function ShoppingMode({ data }) {
                 value={p.price}
                 onChange={(e) => setPrice(p.id, e.target.value ? Number(e.target.value) : null)}
               />
+              <button
+                className="circle-btn danger"
+                title="הסר מהקנייה"
+                onClick={() => toggleNeeded(p.id)}
+              >✕</button>
             </div>
           ))}
         </div>

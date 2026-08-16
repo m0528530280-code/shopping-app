@@ -45,7 +45,10 @@ export default function App() {
     <div className="app-shell">
       <header className="app-header">
         <h1>רשימת קניות</h1>
-        <p className="subtitle">שלום {profile.name} 👋</p>
+        <div className="header-row">
+          <p className="subtitle">שלום {profile.name} 👋</p>
+          <button className="signout-link" onClick={() => supabase.auth.signOut()}>התנתקות</button>
+        </div>
       </header>
 
       <main className="app-content">

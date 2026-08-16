@@ -57,13 +57,15 @@ export function useShoppingData(householdId, userId) {
     if (existing) {
       await supabase.from('shopping_list_items').delete().eq('id', existing.id)
     } else {
-      await supabase.from('shopping_list_items').insert({
+      const { error } = await supabase.from('shopping_list_items').insert({
         household_id: householdId,
         product_id: productId,
         needed: true,
         added_by: userId,
       })
+      if (error && error.code !== '23505') throw error
     }
+    await reloadAll()
   }
 
   async function ensureActiveSession() {
@@ -104,6 +106,7 @@ export function useShoppingData(householdId, userId) {
         updated_by: userId,
       })
     }
+    await reloadAll()
   }
 
   async function setPrice(productId, price) {
@@ -123,6 +126,7 @@ export function useShoppingData(householdId, userId) {
         updated_by: userId,
       })
     }
+    await reloadAll()
   }
 
   async function completeSession() {
@@ -151,10 +155,30 @@ export function useShoppingData(householdId, userId) {
       category: category || 'אחר',
       default_price: defaultPrice || null,
     })
+    await reloadAll()
   }
 
   async function updateProduct(id, fields) {
     await supabase.from('products').update(fields).eq('id', id)
+    await reloadAll()
+  }
+
+  async function addProducts(items) {
+    const existingNames = new Set(products.map((p) => p.name.trim().toLowerCase()))
+    const rows = items
+      .filter((it) => !existingNames.has(it.name.trim().toLowerCase()))
+      .map((it) => ({
+        household_id: householdId,
+        name: it.name,
+        category: it.category || 'אחר',
+        default_price: it.default_price || null,
+      }))
+    if (rows.length) {
+      const { error } = await supabase.from('products').insert(rows)
+      if (error) throw error
+    }
+    await reloadAll()
+    return rows.length
   }
 
   return {
@@ -170,6 +194,7 @@ export function useShoppingData(householdId, userId) {
     completeSession,
     addProduct,
     updateProduct,
+    addProducts,
     reloadAll,
   }
 }

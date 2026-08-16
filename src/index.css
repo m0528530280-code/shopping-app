@@ -75,6 +75,22 @@ input, select {
   margin: 0;
 }
 
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.signout-link {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 13px;
+  text-decoration: underline;
+  flex-shrink: 0;
+}
+
 /* -- Nav (bottom tab bar) -- */
 .tab-bar {
   position: sticky;
@@ -168,6 +184,12 @@ input, select {
   border-color: var(--amber);
   background: var(--amber-soft);
   color: var(--amber);
+}
+
+.circle-btn.danger {
+  border-color: var(--brick);
+  background: var(--brick-soft);
+  color: var(--brick);
 }
 
 .price-input {
@@ -296,6 +318,23 @@ input, select {
   border-radius: var(--radius-sm);
   font-size: 13px;
   margin-bottom: 10px;
+}
+.auth-message {
+  color: var(--green);
+  background: var(--green-soft);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.auth-link {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 13px;
+  text-decoration: underline;
+  margin-top: 12px;
+  text-align: center;
 }
 
 /* -- History card -- */

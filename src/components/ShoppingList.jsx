@@ -12,8 +12,15 @@ export default function ShoppingList({ data }) {
     return activeOnly.filter((p) => p.name.includes(search.trim()))
   }, [products, search])
 
-  const activeList = filtered.filter((p) => neededIds.has(p.id))
-  const catalog = filtered.filter((p) => !neededIds.has(p.id))
+  const grouped = useMemo(() => {
+    const acc = {}
+    for (const p of filtered) {
+      const cat = p.category || 'אחר'
+      acc[cat] = acc[cat] || []
+      acc[cat].push(p)
+    }
+    return Object.entries(acc).sort(([a], [b]) => a.localeCompare(b, 'he'))
+  }, [filtered])
 
   function purchasedFor(productId) {
     return sessionItems.find((i) => i.product_id === productId)?.purchased || false
@@ -32,56 +39,49 @@ export default function ShoppingList({ data }) {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      {activeList.length === 0 ? (
+      {grouped.length === 0 ? (
         <div className="empty-state">
           <div className="big">🛒</div>
-          <div>הרשימה ריקה. חפשו מוצר למטה והוסיפו אותו.</div>
+          <div>לא נמצאו מוצרים.</div>
         </div>
       ) : (
-        <>
-          <div className="cat-header">ברשימה ({activeList.length})</div>
-          {activeList.map((p) => (
-            <div key={p.id} className={`item-row ${purchasedFor(p.id) ? 'purchased' : ''}`}>
-              <button
-                className={`circle-btn needed-on`}
-                title="צריך לקנות"
-                onClick={() => toggleNeeded(p.id)}
-              >✓</button>
-              <button
-                className={`circle-btn ${purchasedFor(p.id) ? 'purchased-on' : ''}`}
-                title="נקנה"
-                onClick={() => togglePurchased(p.id)}
-              >{purchasedFor(p.id) ? '✓' : ''}</button>
-              <div className="info">
-                <div className="name">{p.name}</div>
-                <div className="cat">{p.category}</div>
-              </div>
-              <input
-                className="price-input"
-                type="number"
-                inputMode="decimal"
-                placeholder="₪"
-                value={priceFor(p.id)}
-                onChange={(e) => setPrice(p.id, e.target.value ? Number(e.target.value) : null)}
-              />
-            </div>
-          ))}
-        </>
-      )}
-
-      {search.trim() && catalog.length > 0 && (
-        <>
-          <div className="cat-header">הוספה מהמאגר</div>
-          {catalog.map((p) => (
-            <div key={p.id} className="item-row">
-              <button className="circle-btn" title="הוסף לרשימה" onClick={() => toggleNeeded(p.id)}>+</button>
-              <div className="info">
-                <div className="name">{p.name}</div>
-                <div className="cat">{p.category}</div>
-              </div>
-            </div>
-          ))}
-        </>
+        grouped.map(([cat, catItems]) => (
+          <div key={cat}>
+            <div className="cat-header">{cat}</div>
+            {catItems.map((p) => {
+              const needed = neededIds.has(p.id)
+              return (
+                <div key={p.id} className={`item-row ${needed && purchasedFor(p.id) ? 'purchased' : ''}`}>
+                  <button
+                    className={`circle-btn ${needed ? 'needed-on' : ''}`}
+                    title={needed ? 'הסר מהרשימה' : 'הוסף לרשימה'}
+                    onClick={() => toggleNeeded(p.id)}
+                  >{needed ? '✓' : ''}</button>
+                  <div className="info">
+                    <div className="name">{p.name}</div>
+                  </div>
+                  {needed && (
+                    <>
+                      <button
+                        className={`circle-btn ${purchasedFor(p.id) ? 'purchased-on' : ''}`}
+                        title="נקנה"
+                        onClick={() => togglePurchased(p.id)}
+                      >{purchasedFor(p.id) ? '✓' : ''}</button>
+                      <input
+                        className="price-input"
+                        type="number"
+                        inputMode="decimal"
+                        placeholder="₪"
+                        value={priceFor(p.id)}
+                        onChange={(e) => setPrice(p.id, e.target.value ? Number(e.target.value) : null)}
+                      />
+                    </>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        ))
       )}
     </div>
   )
