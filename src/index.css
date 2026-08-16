@@ -102,7 +102,7 @@ input, select {
   content: '';
   position: absolute;
   inset: -10px;
-  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Fresh_Vegetables_display_in_Iloilo_Terminal_Public_Market_05.jpg/960px-Fresh_Vegetables_display_in_Iloilo_Terminal_Public_Market_05.jpg');
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/2023_Amsterdam_-_a_fruit_market_stall_at_the_Albert_Cuyp_market_in_the_sunlight_with_a_lot_of_city_people_walking_and_shopping_-_free_download_photo_in_Dutch_street_photography_by_Fons_Heijnsbroek%2C_Netherlands.tif/lossy-page1-960px-thumbnail.tif.jpg');
   background-size: cover;
   background-position: center 60%;
   filter: blur(9px) saturate(1.15) brightness(0.85);
