@@ -51,7 +51,7 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <header className="app-header">
+      <header className={`app-header ${tab === 'list' ? 'app-header--photo' : ''}`}>
         <h1>רשימת קניות</h1>
         <div className="header-row">
           <p className="subtitle">שלום {profile.name} 👋</p>
