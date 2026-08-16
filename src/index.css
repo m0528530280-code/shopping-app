@@ -133,8 +133,10 @@ input, select {
   position: sticky;
   bottom: 0;
   display: flex;
-  background: var(--surface);
-  border-top: 1px solid var(--surface-border);
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(16,24,40,0.06);
   box-shadow: 0 -6px 20px rgba(16,24,40,0.05);
   padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
   z-index: 10;
@@ -160,7 +162,7 @@ input, select {
   color: var(--green);
   background: linear-gradient(135deg, var(--green-soft), #C7ECE5);
   transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(14,107,92,0.14);
+  box-shadow: 0 2px 6px rgba(14,107,92,0.14), 0 0 0 4px rgba(14,107,92,0.08);
 }
 
 .tab-bar button.active::after {
@@ -219,7 +221,7 @@ input, select {
   align-items: center;
   gap: 10px;
   background: var(--surface);
-  border: 1px solid var(--surface-border);
+  border: 1px solid rgba(16,24,40,0.04);
   border-radius: var(--radius);
   padding: 14px 16px;
   margin-bottom: 8px;
@@ -277,12 +279,14 @@ input, select {
   border-color: var(--green);
   background: linear-gradient(135deg, var(--green-soft), #C7ECE5);
   color: var(--green);
+  box-shadow: 0 0 0 4px rgba(14,107,92,0.10);
 }
 
 .circle-btn.purchased-on {
   border-color: var(--amber);
   background: linear-gradient(135deg, var(--amber-soft), #F0D9A8);
   color: var(--amber);
+  box-shadow: 0 0 0 4px rgba(140,90,21,0.10);
 }
 
 .circle-btn.danger {
@@ -379,12 +383,12 @@ input, select {
   color: var(--ink-soft);
 }
 .progress-text .progress-pct {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-weight: 700;
   color: var(--green);
 }
 .progress-track {
-  height: 8px;
+  height: 5px;
   border-radius: 999px;
   background: var(--surface-border);
   overflow: hidden;
@@ -412,13 +416,16 @@ input, select {
   font-family: var(--font-display);
   box-shadow: var(--shadow-lg);
 }
-.receipt-total .label { font-size: 12.5px; opacity: 0.65; letter-spacing: 0.2px; }
+.receipt-total .label { font-size: 12.5px; opacity: 0.65; letter-spacing: 0.2px; font-family: var(--font-body); }
 .receipt-total .amount {
-  font-size: 34px;
-  font-weight: 800;
+  font-family: var(--font-mono);
+  font-size: 32px;
+  font-weight: 700;
   letter-spacing: -0.5px;
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: embed;
 }
 
 /* -- Empty state -- */
@@ -579,7 +586,7 @@ input, select {
 }
 .history-card .date { font-weight: 600; font-size: 14px; }
 .history-card .meta { font-size: 12px; color: var(--ink-soft); }
-.history-card .total { font-family: var(--font-display); font-weight: 800; font-size: 17px; color: var(--green); }
+.history-card .total { font-family: var(--font-mono); font-weight: 700; font-size: 17px; color: var(--green); direction: ltr; unicode-bidi: embed; }
 
 .modal-backdrop {
   position: fixed;
@@ -591,7 +598,9 @@ input, select {
   animation: fade-in 0.18s ease;
 }
 .modal-sheet {
-  background: var(--surface);
+  background: rgba(255,255,255,0.86);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   width: 100%;
   max-width: 520px;
   margin: 0 auto;
