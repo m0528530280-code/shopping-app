@@ -79,7 +79,7 @@ export default function App() {
             {tab === 'shopping' && <ShoppingMode data={shoppingData} />}
             {tab === 'products' && <ProductManager data={shoppingData} />}
             {tab === 'history' && <History householdId={profile.household_id} />}
-            {tab === 'more' && <MoreHub householdId={profile.household_id} />}
+            {tab === 'more' && <MoreHub householdId={profile.household_id} shoppingData={shoppingData} />}
           </div>
         )}
       </main>

@@ -185,6 +185,41 @@ export function useShoppingData(householdId, userId) {
     return rows.length
   }
 
+  async function addIngredientsToList(lines) {
+    const names = []
+    const seen = new Set()
+    for (const raw of lines) {
+      const name = raw.trim()
+      const key = name.toLowerCase()
+      if (!name || seen.has(key)) continue
+      seen.add(key)
+      names.push(name)
+    }
+    if (!names.length) return
+
+    const existingByName = new Map(products.map((p) => [p.name.trim().toLowerCase(), p.id]))
+    const toCreate = names.filter((n) => !existingByName.has(n.toLowerCase()))
+    const resolvedIds = names.filter((n) => existingByName.has(n.toLowerCase())).map((n) => existingByName.get(n.toLowerCase()))
+
+    if (toCreate.length) {
+      const { data: created, error } = await supabase
+        .from('products')
+        .insert(toCreate.map((name) => ({ household_id: householdId, name, category: 'אחר' })))
+        .select()
+      if (error) throw error
+      resolvedIds.push(...created.map((p) => p.id))
+    }
+
+    const neededIds = new Set(listItems.map((i) => i.product_id))
+    const newIds = resolvedIds.filter((id) => !neededIds.has(id))
+    if (newIds.length) {
+      await supabase.from('shopping_list_items').insert(
+        newIds.map((product_id) => ({ household_id: householdId, product_id, needed: true, added_by: userId }))
+      )
+    }
+    await reloadAll()
+  }
+
   return {
     loading,
     products,
@@ -199,6 +234,7 @@ export function useShoppingData(householdId, userId) {
     addProduct,
     updateProduct,
     addProducts,
+    addIngredientsToList,
     reloadAll,
   }
 }

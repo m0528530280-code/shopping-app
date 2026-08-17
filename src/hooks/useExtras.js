@@ -72,6 +72,30 @@ export function useExtras(householdId) {
     await supabase.from('custom_list_items').delete().eq('id', itemId)
   }
 
+  async function addListItems(listId, lines) {
+    const rows = lines.map((l) => l.trim()).filter(Boolean).map((text) => ({ list_id: listId, text }))
+    if (!rows.length) return
+    await supabase.from('custom_list_items').insert(rows)
+  }
+
+  // -- Meal ideas --
+
+  async function createIdea({ title, notes, ingredientsText }) {
+    const { error } = await supabase.from('meal_ideas').insert({
+      household_id: householdId,
+      title: title.trim(),
+      notes: notes?.trim() || null,
+      ingredients_text: ingredientsText?.trim() || null,
+    })
+    if (error) throw error
+    await reload()
+  }
+
+  async function deleteIdea(ideaId) {
+    await supabase.from('meal_ideas').delete().eq('id', ideaId)
+    await reload()
+  }
+
   return {
     customLists,
     mealIdeas,
@@ -80,7 +104,10 @@ export function useExtras(householdId) {
     deleteList,
     getListItems,
     addListItem,
+    addListItems,
     toggleListItem,
     deleteListItem,
+    createIdea,
+    deleteIdea,
   }
 }
