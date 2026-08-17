@@ -13,7 +13,7 @@ export function useShoppingData(householdId, userId) {
     const [{ data: prod }, { data: list }, { data: sess }] = await Promise.all([
       supabase.from('products').select('*').eq('household_id', householdId).order('name'),
       supabase.from('shopping_list_items').select('*').eq('household_id', householdId),
-      supabase.from('shopping_sessions').select('*').eq('household_id', householdId).eq('status', 'active').maybeSingle(),
+      supabase.from('shopping_sessions').select('*').eq('household_id', householdId).eq('status', 'active').order('started_at', { ascending: false }).limit(1).maybeSingle(),
     ])
     setProducts(prod || [])
     setListItems(list || [])
@@ -77,6 +77,19 @@ export function useShoppingData(householdId, userId) {
 
   async function ensureActiveSession() {
     if (session) return session
+    // double-check the DB directly in case state is stale - avoid ever creating a second active session
+    const { data: existingActive } = await supabase
+      .from('shopping_sessions')
+      .select('*')
+      .eq('household_id', householdId)
+      .eq('status', 'active')
+      .order('started_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+    if (existingActive) {
+      await reloadAll()
+      return existingActive
+    }
     const { data, error } = await supabase
       .from('shopping_sessions')
       .insert({ household_id: householdId, status: 'active' })
