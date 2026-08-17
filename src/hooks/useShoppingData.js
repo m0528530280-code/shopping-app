@@ -210,12 +210,19 @@ export function useShoppingData(householdId, userId) {
       resolvedIds.push(...created.map((p) => p.id))
     }
 
-    const neededIds = new Set(listItems.map((i) => i.product_id))
-    const newIds = resolvedIds.filter((id) => !neededIds.has(id))
-    if (newIds.length) {
-      await supabase.from('shopping_list_items').insert(
-        newIds.map((product_id) => ({ household_id: householdId, product_id, needed: true, added_by: userId }))
-      )
+    const listItemByProduct = new Map(listItems.map((li) => [li.product_id, li]))
+    const toInsert = []
+    for (const id of resolvedIds) {
+      const existing = listItemByProduct.get(id)
+      if (existing) {
+        // caller already confirmed adding this on top of an existing entry - bump quantity
+        await supabase.from('shopping_list_items').update({ qty: (Number(existing.qty) || 1) + 1 }).eq('id', existing.id)
+      } else {
+        toInsert.push({ household_id: householdId, product_id: id, needed: true, added_by: userId, qty: 1 })
+      }
+    }
+    if (toInsert.length) {
+      await supabase.from('shopping_list_items').insert(toInsert)
     }
     await reloadAll()
   }
