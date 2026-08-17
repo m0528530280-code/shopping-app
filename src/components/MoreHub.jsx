@@ -14,7 +14,7 @@ const SECTIONS = [
 
 export default function MoreHub({ householdId, shoppingData }) {
   const extras = useExtras(householdId)
-  const [section, setSection] = useState('products')
+  const [section, setSection] = useState('ideas')
 
   return (
     <div>
