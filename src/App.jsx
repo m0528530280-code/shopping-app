@@ -7,10 +7,11 @@ import ShoppingList from './components/ShoppingList'
 import ShoppingMode from './components/ShoppingMode'
 import ProductManager from './components/ProductManager'
 import History from './components/History'
+import MoreHub from './components/MoreHub'
 import EmptyState from './components/EmptyState'
 import SkeletonList from './components/SkeletonList'
 
-const TAB_ORDER = ['list', 'shopping', 'products', 'history']
+const TAB_ORDER = ['list', 'shopping', 'products', 'history', 'more']
 
 export default function App() {
   const [session, setSession] = useState(undefined) // undefined = loading
@@ -78,6 +79,7 @@ export default function App() {
             {tab === 'shopping' && <ShoppingMode data={shoppingData} />}
             {tab === 'products' && <ProductManager data={shoppingData} />}
             {tab === 'history' && <History householdId={profile.household_id} />}
+            {tab === 'more' && <MoreHub householdId={profile.household_id} />}
           </div>
         )}
       </main>

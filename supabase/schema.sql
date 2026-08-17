@@ -64,6 +64,32 @@ create table shopping_session_items (
   updated_at timestamptz default now()
 );
 
+-- רשימות מיוחדות (מנגל, כלי בית, אירועים וכו') - נפרד מהרשימה הקבועה
+create table custom_lists (
+  id uuid primary key default uuid_generate_v4(),
+  household_id uuid references households(id) on delete cascade,
+  name text not null,
+  created_at timestamptz default now()
+);
+
+create table custom_list_items (
+  id uuid primary key default uuid_generate_v4(),
+  list_id uuid references custom_lists(id) on delete cascade,
+  text text not null,
+  checked boolean default false,
+  created_at timestamptz default now()
+);
+
+-- רעיונות לארוחה / מתכונים
+create table meal_ideas (
+  id uuid primary key default uuid_generate_v4(),
+  household_id uuid references households(id) on delete cascade,
+  title text not null,
+  notes text,
+  ingredients_text text,
+  created_at timestamptz default now()
+);
+
 -- ---------- אבטחה (RLS) ----------
 
 alter table households enable row level security;
@@ -72,6 +98,9 @@ alter table products enable row level security;
 alter table shopping_list_items enable row level security;
 alter table shopping_sessions enable row level security;
 alter table shopping_session_items enable row level security;
+alter table custom_lists enable row level security;
+alter table custom_list_items enable row level security;
+alter table meal_ideas enable row level security;
 
 create or replace function get_my_household_id()
 returns uuid as $$
@@ -106,11 +135,30 @@ create policy "session items access" on shopping_session_items
     shopping_session_id in (select id from shopping_sessions where household_id = get_my_household_id())
   );
 
+create policy "custom lists access" on custom_lists
+  for all using (household_id = get_my_household_id())
+  with check (household_id = get_my_household_id());
+
+create policy "custom list items access" on custom_list_items
+  for all using (
+    list_id in (select id from custom_lists where household_id = get_my_household_id())
+  )
+  with check (
+    list_id in (select id from custom_lists where household_id = get_my_household_id())
+  );
+
+create policy "meal ideas access" on meal_ideas
+  for all using (household_id = get_my_household_id())
+  with check (household_id = get_my_household_id());
+
 -- ---------- הפעלת Realtime ----------
 
 alter publication supabase_realtime add table shopping_list_items;
 alter publication supabase_realtime add table shopping_sessions;
 alter publication supabase_realtime add table shopping_session_items;
+alter publication supabase_realtime add table custom_lists;
+alter publication supabase_realtime add table custom_list_items;
+alter publication supabase_realtime add table meal_ideas;
 
 -- ============================================================
 -- שלב ידני אחרי הרצת הקובץ:

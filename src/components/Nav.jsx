@@ -3,6 +3,7 @@ const TABS = [
   { id: 'shopping', label: 'מצב קנייה', icon: '🛒' },
   { id: 'products', label: 'מוצרים', icon: '📦' },
   { id: 'history', label: 'היסטוריה', icon: '🧾' },
+  { id: 'more', label: 'עוד', icon: '✨' },
 ]
 
 export default function Nav({ active, onChange, badge = 0 }) {
