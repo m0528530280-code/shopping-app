@@ -136,9 +136,10 @@ export function useShoppingData(householdId, userId) {
     await reloadAll()
   }
 
-  async function completeSession() {
+  async function completeSession(manualTotal) {
     if (!session) return
-    const total = sessionItems.reduce((sum, i) => sum + (i.purchased ? Number(i.price || 0) : 0), 0)
+    const computed = sessionItems.reduce((sum, i) => sum + (i.purchased ? Number(i.price || 0) : 0), 0)
+    const total = manualTotal !== undefined && !Number.isNaN(manualTotal) ? manualTotal : computed
     await supabase
       .from('shopping_sessions')
       .update({ status: 'completed', completed_at: new Date().toISOString(), total_amount: total, completed_by: userId })

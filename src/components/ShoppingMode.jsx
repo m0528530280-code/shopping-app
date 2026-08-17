@@ -1,44 +1,17 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import CheckIcon from './CheckIcon'
 import EmptyState from './EmptyState'
 import QtyStepper from './QtyStepper'
-
-function useCountUp(value, duration = 450) {
-  const [display, setDisplay] = useState(value)
-  const prevRef = useRef(value)
-
-  useEffect(() => {
-    const from = prevRef.current
-    const to = value
-    if (from === to) return
-    const start = performance.now()
-    let raf
-    function tick(now) {
-      const p = Math.min(1, (now - start) / duration)
-      const eased = 1 - Math.pow(1 - p, 3)
-      setDisplay(from + (to - from) * eased)
-      if (p < 1) {
-        raf = requestAnimationFrame(tick)
-      } else {
-        prevRef.current = to
-        setDisplay(to)
-      }
-    }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [value, duration])
-
-  return display
-}
 
 export default function ShoppingMode({ data }) {
   const { products, listItems, sessionItems, togglePurchased, setPrice, setQty, completeSession, toggleNeeded } = data
   const [filter, setFilter] = useState('all') // all | pending | purchased
   const [confirming, setConfirming] = useState(false)
   const [celebrate, setCelebrate] = useState(false)
+  const [manualTotal, setManualTotal] = useState('')
 
   async function handleComplete() {
-    await completeSession()
+    await completeSession(manualTotal !== '' ? Number(manualTotal) : undefined)
     setConfirming(false)
     setCelebrate(true)
     setTimeout(() => setCelebrate(false), 1700)
@@ -71,7 +44,6 @@ export default function ShoppingMode({ data }) {
   const total = items.reduce((sum, i) => sum + (i.purchased ? Number(i.price || 0) : 0), 0)
   const purchasedCount = items.filter((i) => i.purchased).length
   const pct = items.length ? (purchasedCount / items.length) * 100 : 0
-  const animatedTotal = useCountUp(total)
 
   const celebrateOverlay = celebrate && (
     <div className="celebrate-overlay">
@@ -128,7 +100,7 @@ export default function ShoppingMode({ data }) {
               <div className="info">
                 <div className="name">{p.name}</div>
               </div>
-              <QtyStepper value={p.qty} onChange={(q) => setQty(p.id, q)} />
+              {p.qty > 1 && <QtyStepper value={p.qty} onChange={(q) => setQty(p.id, q)} />}
               <input
                 className="price-input"
                 type="number"
@@ -152,9 +124,11 @@ export default function ShoppingMode({ data }) {
       <div className="receipt-total">
         <div>
           <div className="label">{purchasedCount} מתוך {items.length} נקנו</div>
-          <div className="amount">₪{animatedTotal.toFixed(2)}</div>
         </div>
-        <button className="btn btn-amber" onClick={() => setConfirming(true)}>סיום קנייה</button>
+        <button
+          className="btn btn-amber"
+          onClick={() => { setManualTotal(total ? total.toFixed(2) : ''); setConfirming(true) }}
+        >סיום קנייה</button>
       </div>
 
       {confirming && (
@@ -162,9 +136,19 @@ export default function ShoppingMode({ data }) {
           <div className="modal-sheet" onClick={(e) => e.stopPropagation()}>
             <h3 style={{ fontFamily: 'var(--font-display)' }}>לסיים את הקנייה?</h3>
             <p style={{ color: 'var(--ink-soft)' }}>
-              הקנייה תישמר בהיסטוריה עם סה"כ ₪{total.toFixed(2)}.
               מוצרים שלא סומנו כ"נקנה" יישארו ברשימה לקנייה הבאה.
             </p>
+            <label style={{ fontSize: 13, color: 'var(--ink-soft)', display: 'block', marginBottom: 6 }}>
+              סכום סופי ששולם
+            </label>
+            <input
+              className="search-box"
+              type="number"
+              inputMode="decimal"
+              placeholder="₪ הזן סכום"
+              value={manualTotal}
+              onChange={(e) => setManualTotal(e.target.value)}
+            />
             <button
               className="btn btn-primary btn-full"
               style={{ marginBottom: 8 }}

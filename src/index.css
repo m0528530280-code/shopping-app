@@ -362,10 +362,21 @@ input, select {
 }
 
 .circle-btn.danger {
-  border-color: var(--brick);
-  background: var(--brick-soft);
-  color: var(--brick);
+  border-color: var(--surface-border);
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 13px;
+  opacity: 0.6;
 }
+@media (hover: hover) {
+  .circle-btn.danger:hover {
+    border-color: var(--brick);
+    background: var(--brick-soft);
+    color: var(--brick);
+    opacity: 1;
+  }
+}
+.circle-btn.danger:active { opacity: 1; }
 
 .check-icon path {
   stroke-dasharray: 24;
