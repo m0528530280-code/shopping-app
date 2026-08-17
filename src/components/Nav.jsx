@@ -1,8 +1,6 @@
 const TABS = [
   { id: 'list', label: 'רשימה', icon: '📝' },
   { id: 'shopping', label: 'מצב קנייה', icon: '🛒' },
-  { id: 'products', label: 'מוצרים', icon: '📦' },
-  { id: 'history', label: 'היסטוריה', icon: '🧾' },
   { id: 'more', label: 'עוד', icon: '✨' },
 ]
 
