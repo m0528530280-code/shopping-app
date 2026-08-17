@@ -632,26 +632,26 @@ input, select {
 .more-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 16px;
 }
 .more-tile {
-  aspect-ratio: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  padding: 12px 8px;
   background: var(--surface);
   border: 1px solid rgba(27,16,51,0.04);
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-sm);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--ink-soft);
   transition: transform 0.15s var(--ease-spring), box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
-.more-tile .icon { font-size: 30px; line-height: 1; }
+.more-tile .icon { font-size: 18px; line-height: 1; }
 .more-tile.active {
   background: linear-gradient(135deg, var(--green-soft), #C3EFEE);
   color: var(--green);
