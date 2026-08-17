@@ -124,15 +124,11 @@ export function useShoppingData(householdId, userId) {
       .from('shopping_sessions')
       .update({ status: 'completed', completed_at: new Date().toISOString(), total_amount: total, completed_by: userId })
       .eq('id', session.id)
-    // reset active list - only remove items that were purchased; keep unpurchased ones for next round
-    const purchasedIds = sessionItems.filter((i) => i.purchased).map((i) => i.product_id)
-    if (purchasedIds.length) {
-      await supabase
-        .from('shopping_list_items')
-        .delete()
-        .eq('household_id', householdId)
-        .in('product_id', purchasedIds)
-    }
+    // reset the entire active list back to base state - nothing stays marked as needed
+    await supabase
+      .from('shopping_list_items')
+      .delete()
+      .eq('household_id', householdId)
     await reloadAll()
   }
 

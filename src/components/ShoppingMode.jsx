@@ -128,7 +128,7 @@ export default function ShoppingMode({ data }) {
           <div className="modal-sheet" onClick={(e) => e.stopPropagation()}>
             <h3 style={{ fontFamily: 'var(--font-display)' }}>לסיים את הקנייה?</h3>
             <p style={{ color: 'var(--ink-soft)' }}>
-              מוצרים שלא סומנו כ"נקנה" יישארו ברשימה לקנייה הבאה.
+              כל הרשימה תתאפס - כולל מוצרים שלא סומנו כ"נקנה". תצטרכו לסמן מחדש במסך הרשימה בפעם הבאה.
             </p>
             <label style={{ fontSize: 13, color: 'var(--ink-soft)', display: 'block', marginBottom: 6 }}>
               סכום סופי ששולם
