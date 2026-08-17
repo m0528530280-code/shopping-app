@@ -97,7 +97,14 @@ export function useShoppingData(householdId, userId) {
 
   async function togglePurchased(productId) {
     const sess = session || (await ensureActiveSession())
-    const existing = sessionItems.find((i) => i.product_id === productId && i.shopping_session_id === sess.id)
+    // ensureActiveSession may have just seeded session items and reloaded state;
+    // the sessionItems closure here can be stale, so re-check against the DB directly
+    const { data: freshRows } = await supabase
+      .from('shopping_session_items')
+      .select('*')
+      .eq('shopping_session_id', sess.id)
+      .eq('product_id', productId)
+    const existing = freshRows?.[0]
     const product = products.find((p) => p.id === productId)
     if (existing) {
       await supabase
