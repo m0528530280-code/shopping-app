@@ -4,7 +4,7 @@ import EmptyState from './EmptyState'
 import QtyStepper from './QtyStepper'
 
 export default function ShoppingMode({ data }) {
-  const { products, listItems, sessionItems, togglePurchased, setPrice, setQty, completeSession, toggleNeeded } = data
+  const { products, listItems, sessionItems, togglePurchased, setQty, completeSession, toggleNeeded } = data
   const [filter, setFilter] = useState('all') // all | pending | purchased
   const [confirming, setConfirming] = useState(false)
   const [celebrate, setCelebrate] = useState(false)
@@ -101,14 +101,6 @@ export default function ShoppingMode({ data }) {
                 <div className="name">{p.name}</div>
               </div>
               {p.qty > 1 && <QtyStepper value={p.qty} onChange={(q) => setQty(p.id, q)} />}
-              <input
-                className="price-input"
-                type="number"
-                inputMode="decimal"
-                placeholder="₪"
-                value={p.price}
-                onChange={(e) => setPrice(p.id, e.target.value ? Number(e.target.value) : null)}
-              />
               <button
                 className="circle-btn danger"
                 title="הסר מהקנייה"

@@ -116,26 +116,6 @@ export function useShoppingData(householdId, userId) {
     await reloadAll()
   }
 
-  async function setPrice(productId, price) {
-    const sess = session || (await ensureActiveSession())
-    const existing = sessionItems.find((i) => i.product_id === productId && i.shopping_session_id === sess.id)
-    if (existing) {
-      await supabase
-        .from('shopping_session_items')
-        .update({ price, updated_by: userId, updated_at: new Date().toISOString() })
-        .eq('id', existing.id)
-    } else {
-      await supabase.from('shopping_session_items').insert({
-        shopping_session_id: sess.id,
-        product_id: productId,
-        purchased: false,
-        price,
-        updated_by: userId,
-      })
-    }
-    await reloadAll()
-  }
-
   async function completeSession(manualTotal) {
     if (!session) return
     const computed = sessionItems.reduce((sum, i) => sum + (i.purchased ? Number(i.price || 0) : 0), 0)
@@ -197,7 +177,6 @@ export function useShoppingData(householdId, userId) {
     sessionItems,
     toggleNeeded,
     togglePurchased,
-    setPrice,
     setQty,
     ensureActiveSession,
     completeSession,

@@ -4,7 +4,7 @@ import EmptyState from './EmptyState'
 import QtyStepper from './QtyStepper'
 
 export default function ShoppingList({ data }) {
-  const { products, listItems, sessionItems, toggleNeeded, togglePurchased, setPrice, setQty } = data
+  const { products, listItems, sessionItems, toggleNeeded, togglePurchased, setQty } = data
   const [search, setSearch] = useState('')
 
   const neededIds = new Set(listItems.map((i) => i.product_id))
@@ -31,10 +31,6 @@ export default function ShoppingList({ data }) {
 
   function purchasedFor(productId) {
     return sessionItems.find((i) => i.product_id === productId)?.purchased || false
-  }
-  function priceFor(productId) {
-    const item = sessionItems.find((i) => i.product_id === productId)
-    return item?.price ?? ''
   }
 
   return (
@@ -72,14 +68,6 @@ export default function ShoppingList({ data }) {
                         title="נקנה"
                         onClick={() => togglePurchased(p.id)}
                       >{purchasedFor(p.id) && <CheckIcon />}</button>
-                      <input
-                        className="price-input"
-                        type="number"
-                        inputMode="decimal"
-                        placeholder="₪"
-                        value={priceFor(p.id)}
-                        onChange={(e) => setPrice(p.id, e.target.value ? Number(e.target.value) : null)}
-                      />
                     </>
                   )}
                 </div>

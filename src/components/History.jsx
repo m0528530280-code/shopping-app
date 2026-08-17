@@ -6,17 +6,19 @@ export default function History({ householdId }) {
   const [sessions, setSessions] = useState([])
   const [open, setOpen] = useState(null)
   const [openItems, setOpenItems] = useState([])
+  const [deleting, setDeleting] = useState(null)
+
+  async function load() {
+    const { data } = await supabase
+      .from('shopping_sessions')
+      .select('*')
+      .eq('household_id', householdId)
+      .eq('status', 'completed')
+      .order('completed_at', { ascending: false })
+    setSessions(data || [])
+  }
 
   useEffect(() => {
-    async function load() {
-      const { data } = await supabase
-        .from('shopping_sessions')
-        .select('*')
-        .eq('household_id', householdId)
-        .eq('status', 'completed')
-        .order('completed_at', { ascending: false })
-      setSessions(data || [])
-    }
     if (householdId) load()
   }, [householdId])
 
@@ -28,6 +30,12 @@ export default function History({ householdId }) {
       .eq('shopping_session_id', session.id)
       .eq('purchased', true)
     setOpenItems(data || [])
+  }
+
+  async function confirmDelete() {
+    await supabase.from('shopping_sessions').delete().eq('id', deleting.id)
+    setDeleting(null)
+    await load()
   }
 
   if (sessions.length === 0) {
@@ -43,6 +51,11 @@ export default function History({ householdId }) {
             <div className="meta">{new Date(s.completed_at).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}</div>
           </div>
           <div className="total">₪{Number(s.total_amount).toFixed(2)}</div>
+          <button
+            className="circle-btn danger"
+            title="מחיקה"
+            onClick={(e) => { e.stopPropagation(); setDeleting(s) }}
+          >🗑</button>
         </div>
       ))}
 
@@ -65,6 +78,25 @@ export default function History({ householdId }) {
               <div className="label">סה"כ</div>
               <div className="amount">₪{Number(open.total_amount).toFixed(2)}</div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {deleting && (
+        <div className="modal-backdrop" onClick={() => setDeleting(null)}>
+          <div className="modal-sheet" onClick={(e) => e.stopPropagation()}>
+            <h3 style={{ fontFamily: 'var(--font-display)' }}>למחוק קנייה זו?</h3>
+            <p style={{ color: 'var(--ink-soft)' }}>
+              הקנייה מ-{new Date(deleting.completed_at).toLocaleDateString('he-IL')} תימחק לצמיתות מההיסטוריה. לא ניתן לבטל פעולה זו.
+            </p>
+            <button
+              className="btn btn-full"
+              style={{ background: 'var(--brick)', color: 'white', marginBottom: 8 }}
+              onClick={confirmDelete}
+            >
+              מחיקה
+            </button>
+            <button className="btn btn-outline btn-full" onClick={() => setDeleting(null)}>ביטול</button>
           </div>
         </div>
       )}
