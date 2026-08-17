@@ -6,10 +6,10 @@ import ProductManager from './ProductManager'
 import History from './History'
 
 const SECTIONS = [
-  { id: 'products', label: 'מוצרים' },
-  { id: 'history', label: 'היסטוריה' },
-  { id: 'lists', label: 'רשימות מיוחדות' },
-  { id: 'ideas', label: 'רעיונות לארוחה' },
+  { id: 'products', label: 'מוצרים', icon: '📦' },
+  { id: 'history', label: 'היסטוריה', icon: '🧾' },
+  { id: 'lists', label: 'רשימות מיוחדות', icon: '🗂️' },
+  { id: 'ideas', label: 'רעיונות לארוחה', icon: '🍽️' },
 ]
 
 export default function MoreHub({ householdId, shoppingData }) {
@@ -18,15 +18,15 @@ export default function MoreHub({ householdId, shoppingData }) {
 
   return (
     <div>
-      <div className="filter-pills" style={{ overflowX: 'auto', flexWrap: 'nowrap' }}>
+      <div className="more-grid">
         {SECTIONS.map((s) => (
           <button
             key={s.id}
-            className={section === s.id ? 'active' : ''}
-            style={{ whiteSpace: 'nowrap' }}
+            className={`more-tile ${section === s.id ? 'active' : ''}`}
             onClick={() => setSection(s.id)}
           >
-            {s.label}
+            <span className="icon">{s.icon}</span>
+            <span>{s.label}</span>
           </button>
         ))}
       </div>
