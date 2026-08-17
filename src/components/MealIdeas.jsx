@@ -116,7 +116,7 @@ export default function MealIdeas({ extras, shoppingData }) {
             <button
               className="btn btn-primary btn-full"
               style={{ marginTop: 14 }}
-              onClick={() => setPickingTarget(true)}
+              onClick={() => customLists.length ? setPickingTarget(true) : openReview('main')}
             >
               הוסף מרכיבים לרשימה
             </button>
