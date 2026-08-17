@@ -36,6 +36,7 @@ create table shopping_list_items (
   household_id uuid references households(id) on delete cascade,
   product_id uuid references products(id) on delete cascade,
   needed boolean default true,
+  qty numeric default 1,
   added_by uuid references users(id),
   added_at timestamptz default now(),
   unique(household_id, product_id)

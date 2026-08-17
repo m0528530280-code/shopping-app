@@ -1,12 +1,17 @@
 import { useMemo, useState } from 'react'
 import CheckIcon from './CheckIcon'
 import EmptyState from './EmptyState'
+import QtyStepper from './QtyStepper'
 
 export default function ShoppingList({ data }) {
-  const { products, listItems, sessionItems, toggleNeeded, togglePurchased, setPrice } = data
+  const { products, listItems, sessionItems, toggleNeeded, togglePurchased, setPrice, setQty } = data
   const [search, setSearch] = useState('')
 
   const neededIds = new Set(listItems.map((i) => i.product_id))
+
+  function qtyFor(productId) {
+    return listItems.find((i) => i.product_id === productId)?.qty || 1
+  }
 
   const filtered = useMemo(() => {
     const activeOnly = products.filter((p) => p.active)
@@ -61,6 +66,7 @@ export default function ShoppingList({ data }) {
                   </div>
                   {needed && (
                     <>
+                      <QtyStepper value={qtyFor(p.id)} onChange={(q) => setQty(p.id, q)} />
                       <button
                         className={`circle-btn ${purchasedFor(p.id) ? 'purchased-on' : ''}`}
                         title="נקנה"

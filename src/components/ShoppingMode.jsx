@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import CheckIcon from './CheckIcon'
 import EmptyState from './EmptyState'
+import QtyStepper from './QtyStepper'
 
 function useCountUp(value, duration = 450) {
   const [display, setDisplay] = useState(value)
@@ -31,7 +32,7 @@ function useCountUp(value, duration = 450) {
 }
 
 export default function ShoppingMode({ data }) {
-  const { products, listItems, sessionItems, togglePurchased, setPrice, completeSession, toggleNeeded } = data
+  const { products, listItems, sessionItems, togglePurchased, setPrice, setQty, completeSession, toggleNeeded } = data
   const [filter, setFilter] = useState('all') // all | pending | purchased
   const [confirming, setConfirming] = useState(false)
   const [celebrate, setCelebrate] = useState(false)
@@ -49,7 +50,8 @@ export default function ShoppingMode({ data }) {
       .filter((p) => neededIds.has(p.id))
       .map((p) => {
         const si = sessionItems.find((i) => i.product_id === p.id)
-        return { ...p, purchased: si?.purchased || false, price: si?.price ?? '' }
+        const li = listItems.find((i) => i.product_id === p.id)
+        return { ...p, purchased: si?.purchased || false, price: si?.price ?? '', qty: li?.qty || 1 }
       })
   }, [products, listItems, sessionItems])
 
@@ -126,6 +128,7 @@ export default function ShoppingMode({ data }) {
               <div className="info">
                 <div className="name">{p.name}</div>
               </div>
+              <QtyStepper value={p.qty} onChange={(q) => setQty(p.id, q)} />
               <input
                 className="price-input"
                 type="number"

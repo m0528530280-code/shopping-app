@@ -68,6 +68,13 @@ export function useShoppingData(householdId, userId) {
     await reloadAll()
   }
 
+  async function setQty(productId, qty) {
+    const existing = listItems.find((i) => i.product_id === productId)
+    if (!existing) return
+    await supabase.from('shopping_list_items').update({ qty: Math.max(1, qty) }).eq('id', existing.id)
+    await reloadAll()
+  }
+
   async function ensureActiveSession() {
     if (session) return session
     const { data, error } = await supabase
@@ -190,6 +197,7 @@ export function useShoppingData(householdId, userId) {
     toggleNeeded,
     togglePurchased,
     setPrice,
+    setQty,
     ensureActiveSession,
     completeSession,
     addProduct,
