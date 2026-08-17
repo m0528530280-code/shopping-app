@@ -460,38 +460,46 @@ input, select {
   color: var(--green);
 }
 .progress-track {
-  height: 5px;
+  height: 12px;
   border-radius: 999px;
   background: var(--surface-border);
   overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba(27,16,51,0.08);
+  box-shadow: inset 0 1px 3px rgba(27,16,51,0.1);
 }
 .progress-fill {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--green), var(--green-light));
+  background: var(--signature-grad);
+  background-size: 220% 220%;
+  animation: gradient-flow 5s ease-in-out infinite;
   transition: width 0.45s var(--ease-out);
 }
 
-/* -- Receipt-style total strip -- */
+/* -- כמוסת הסה"כ (אלמנט חתימה) -- */
 .receipt-total {
   position: sticky;
-  bottom: 0;
+  bottom: 10px;
   background: var(--ink-grad);
+  background-size: 220% 220%;
+  animation: gradient-flow 7s ease-in-out infinite;
   color: white;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  padding: 16px 20px;
+  border-radius: 999px;
+  padding: 14px 10px 14px 22px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0 -16px;
+  margin: 10px 2px 0;
   font-family: var(--font-display);
-  box-shadow: var(--shadow-lg);
+  box-shadow:
+    0 10px 26px rgba(198,241,53,0.22),
+    0 12px 32px rgba(14,165,164,0.22),
+    0 16px 40px rgba(124,58,237,0.28),
+    var(--shadow-lg);
 }
 .receipt-total .label { font-size: 12.5px; opacity: 0.85; letter-spacing: 0.2px; font-family: var(--font-body); text-shadow: 0 1px 6px rgba(27,16,51,0.35); }
 .receipt-total .amount {
   font-family: var(--font-display);
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 900;
   letter-spacing: -0.5px;
   line-height: 1.1;
@@ -740,6 +748,10 @@ input, select {
 .confetti-dot:nth-child(8) { --angle: 315deg; background: var(--green); }
 
 /* -- Keyframes -- */
+@keyframes gradient-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
 @keyframes row-pulse {
   0% { transform: scale(1); }
   40% { transform: scale(1.018); }
